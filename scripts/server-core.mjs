@@ -11,8 +11,13 @@ export const ALLOWED_FILES = new Set([
 ]);
 
 export function parsePort(args) {
-  const index = args.indexOf("--port");
-  const value = index === -1 ? DEFAULT_PORT : Number(args[index + 1]);
+  if (args.length === 0) {
+    return DEFAULT_PORT;
+  }
+  if (args.length !== 2 || args[0] !== "--port") {
+    throw new Error("Usage: node scripts/serve.mjs [--port PORT]");
+  }
+  const value = Number(args[1]);
   if (!Number.isInteger(value) || value < 1 || value > 65535) {
     throw new Error("Port must be an integer between 1 and 65535.");
   }

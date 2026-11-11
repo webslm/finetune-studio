@@ -35,6 +35,16 @@ test("the preview server rejects invalid ports", () => {
   }
 });
 
+test("the preview server rejects unknown, duplicate, and trailing arguments", () => {
+  for (const args of [
+    ["--porrt", "9000"],
+    ["--port", "8080", "--port", "9000"],
+    ["--port", "8080", "extra"],
+  ]) {
+    assert.throws(() => parsePort(args), /Usage:/);
+  }
+});
+
 test("the preview server resolves only allowlisted assets", () => {
   assert.equal(
     resolveRequestPath("/", projectRoot),
